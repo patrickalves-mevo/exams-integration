@@ -1,53 +1,85 @@
 flowchart TD
     
     %% nodes
-    request_cpf[Request CPF Number]
-    search_by_cpf[Search by CPF Number]
-    cpf_found{CPF Found?}
-    request_patient_personal_info[Request Patient Personal Info]
-    find_by_health_plan_agreement[Find by Health Plan Agreement]
-    find_by_health_plan_category[Find by Health Plan Category]
-    find_by_health_plan_category_plan[Find by Health Plan Category Plan]
-    create_request[Create Request]
-    add_products_to_request[Add Products to Request]
-    confirm_request[Confirm Request]
-    get_preparations[Get Preparations]
+    request_cpf[Requisita o CPF do Paciente]
+    search_by_cpf[Pesquisa pelo CPF]
+    cpf_found{Encontrou o CPF?}
+    request_patient_personal_info[Requisita os dados pessoais do Paciente]
+    requests_health_plan_agreement[Solicita o plano de saúde do Paciente]
+    
+    
+    request_health_plan_category[Requisita a categoria do plano de saúde]
+    find_by_health_plan_agreement[Pesquisa pelo plano de saúde do paciente]
+    find_by_health_plan_category[Pesquisa pela categoria do plano de saúde]
 
-    store_patient_id[fa:fa-memory store patient id]
-    retrieve_patient_id[fa:fa-memory retrieve patient id]
-    store_health_plan_agreement_id[fa:fa-memory store health plan agreement id]
-    retrieve_health_plan_agreement_id[fa:fa-memory retrieve health plan agreement id]
-    store_health_plan_category_id[fa:fa-memory store health plan category id]
-    retrieve_health_plan_category_id[fa:fa-memory retrieve health plan category id]
-    store_health_plan_category_plan_id[fa:fa-memory store health plan category plan id]
-    retrieve_health_plan_category_plan_id[fa:fa-memory retrieve health plan category plan  id]
-    store_request_id[fa:fa-memory store request id]
-    retrieve_request_id[fa:fa-memory retrieve request id]
+    request_health_plan_category_plan[Requisita o plano da categoria do plano de saúde]
+    find_by_health_plan_category_plan[Pesquisa pelo plano da categoria do plano de saúde]
+
+
+    create_request[Cria a requisição]
+    add_products_to_request[Adiciona os produtos à requisição]
+    confirm_request[Confirma a Requisição]
+    get_preparations[Recupera as preparações]
+    add_health_plan_to_request[Adiciona o plano de saúde à requisição]
+    
+    request_insurance_id[Requisita o número da carteirinha do plano de saúde]
+
+    request_products_to_patient[Requisita os produtos ao paciente]
+    find_by_available_products[Pesquisa pelos produtos disponíveis]
+    review_request[Revisa a requisição]
+    show_preparations[Mostra as preparações ao paciente]
+
+
+    store_patient_id[fa:fa-memory store]
+    store_health_plan_agreement_id[fa:fa-memory store]
+    store_health_plan_category_id[fa:fa-memory store]
+    store_health_plan_category_plan_id[fa:fa-memory store]
+    store_insurance_id[fa:fa-memory store]
+    store_request_id[fa:fa-memory store]
+    
+    retrieve_patient_id[fa:fa-memory Recupera o patient id]
+    retrieve_request_body_data[Recupera os dados do corpo da requisição]
+    
+
 
     %% edges
-    request_cpf -->|Pass retrieved CPF Number| search_by_cpf
-    search_by_cpf -->|search response| cpf_found
-    cpf_found -->|Yes| store_patient_id
-    cpf_found -->|No| request_patient_personal_info --> store_patient_id
+    request_cpf 
+    -->|Pass retrieved CPF Number| search_by_cpf
+    -->|search response| cpf_found
+    cpf_found -->|Sim - patient_id| store_patient_id
+    cpf_found -->|Não - patient_id| request_patient_personal_info --> store_patient_id
 
     
-    store_patient_id --> find_by_health_plan_agreement
-    find_by_health_plan_agreement --> store_health_plan_agreement_id
-    store_health_plan_agreement_id --> find_by_health_plan_category
-    
- 
-    find_by_health_plan_category -->  store_health_plan_category_id 
-    store_health_plan_category_id --> find_by_health_plan_category_plan
+    store_patient_id 
+    --> requests_health_plan_agreement
+    --> find_by_health_plan_agreement
+    --> |health_plan_agreement_id|store_health_plan_agreement_id
+    --> request_health_plan_category
+    --> find_by_health_plan_category
+    --> |health_plan_category_id|store_health_plan_category_id
+    --> request_health_plan_category_plan
+    --> find_by_health_plan_category_plan
+    --> |health_plan_category_plan_id|store_health_plan_category_plan_id
+    --> request_insurance_id 
+    --> |carteirinha|store_insurance_id
+    -->retrieve_patient_id 
+    --> |patient_id|create_request
+    --> |request_id|store_request_id
+    --> retrieve_request_body_data
+    --> |insurance_id, health_plan_category_plan_id, request_id|add_health_plan_to_request 
+    --> find_by_available_products
+    --> request_products_to_patient
+    --> |Products|add_products_to_request 
+    --> review_request
+    --> confirm_request
+    --> get_preparations 
+    --> show_preparations
 
-    find_by_health_plan_category_plan --> store_health_plan_category_plan_id
-    store_health_plan_category_plan_id -->
-    retrieve_patient_id & retrieve_health_plan_agreement_id & retrieve_health_plan_category_id & retrieve_health_plan_category_plan_id -->
+
+
+
     
-    create_request --> |request_id| store_request_id
-    store_request_id --> add_products_to_request
-    
-    add_products_to_request --> retrieve_request_id -->|request_id| confirm_request
-    confirm_request -->|request_id| get_preparations
+
     
     
     
