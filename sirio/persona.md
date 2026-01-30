@@ -1,4 +1,4 @@
-## Patient info
+## Paciente
 
 ```json
 {
@@ -20,23 +20,23 @@
 }
 ```
 
-## Patient Agreement, category and plan
+## Convênio, categoria e plano
 
 
-Type|Name
+Tipo|Nome
 -|-
 Agreement|Sul América Saúde S/A
 Category|Empresarial - Executivo
 Plan|545-Executivo
 
 
-## Insurance Card
+## Carteirinha
 
 ```text
 00000444477770000
 ```
 
-## Products
+## Produtos
 ```text
 Endoscopia digestiva alta - ADULTO
 Uréia na Urina
