@@ -9,11 +9,14 @@ flowchart TD
     
     
     request_health_plan_category[Requisita a categoria do plano de saúde]
+    request_user_appointment_datetime[Mostra os horários disponíveis para o paciente agendar]
     find_by_health_plan_agreement[Pesquisa pelo plano de saúde do paciente]
     find_by_health_plan_category[Pesquisa pela categoria do plano de saúde]
 
     request_health_plan_category_plan[Requisita o plano da categoria do plano de saúde]
     find_by_health_plan_category_plan[Pesquisa pelo plano da categoria do plano de saúde]
+    save_appointment_datetime[Salva a data e hora agendada]
+    save_questionnaire[Salva as respostas do questionário]
 
 
     create_request[Cria a requisição]
@@ -28,6 +31,8 @@ flowchart TD
     find_by_available_products[Pesquisa pelos produtos disponíveis]
     review_request[Revisa a requisição]
     show_preparations[Mostra as preparações ao paciente]
+    needs_questionnaire{Necessita de questionário?}
+    show_questionnaire[Mostra o questionário ao paciente]
 
 
     store_patient_id[fa:fa-memory store]
@@ -69,7 +74,18 @@ flowchart TD
     --> |insurance_id, health_plan_category_plan_id, request_id|add_health_plan_to_request 
     --> find_by_available_products
     --> request_products_to_patient
-    --> |Products|add_products_to_request 
+    --> |Products|add_products_to_request
+    --> needs_questionnaire
+    needs_questionnaire 
+    -->|Sim| show_questionnaire[Mostra o questionário ao paciente]
+    --> save_questionnaire
+    --> request_user_appointment_datetime
+    
+    needs_questionnaire 
+    -->|Não| request_user_appointment_datetime
+    
+    request_user_appointment_datetime
+    --> save_appointment_datetime
     --> review_request
     --> confirm_request
     --> get_preparations 
