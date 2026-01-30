@@ -1,0 +1,58 @@
+flowchart TD
+    
+    %% nodes
+    request_cpf[Request CPF Number]
+    search_by_cpf[Search by CPF Number]
+    cpf_found{CPF Found?}
+    request_patient_personal_info[Request Patient Personal Info]
+    find_by_health_plan_agreement[Find by Health Plan Agreement]
+    find_by_health_plan_category[Find by Health Plan Category]
+    find_by_health_plan_category_plan[Find by Health Plan Category Plan]
+    create_request[Create Request]
+    add_products_to_request[Add Products to Request]
+    confirm_request[Confirm Request]
+    get_preparations[Get Preparations]
+
+    store_patient_id[fa:fa-memory store patient id]
+    retrieve_patient_id[fa:fa-memory retrieve patient id]
+    store_health_plan_agreement_id[fa:fa-memory store health plan agreement id]
+    retrieve_health_plan_agreement_id[fa:fa-memory retrieve health plan agreement id]
+    store_health_plan_category_id[fa:fa-memory store health plan category id]
+    retrieve_health_plan_category_id[fa:fa-memory retrieve health plan category id]
+    store_health_plan_category_plan_id[fa:fa-memory store health plan category plan id]
+    retrieve_health_plan_category_plan_id[fa:fa-memory retrieve health plan category plan  id]
+    store_request_id[fa:fa-memory store request id]
+    retrieve_request_id[fa:fa-memory retrieve request id]
+
+    %% edges
+    request_cpf -->|Pass retrieved CPF Number| search_by_cpf
+    search_by_cpf -->|search response| cpf_found
+    cpf_found -->|Yes| store_patient_id
+    cpf_found -->|No| request_patient_personal_info --> store_patient_id
+
+    
+    store_patient_id --> find_by_health_plan_agreement
+    find_by_health_plan_agreement --> store_health_plan_agreement_id
+    store_health_plan_agreement_id --> find_by_health_plan_category
+    
+ 
+    find_by_health_plan_category -->  store_health_plan_category_id 
+    store_health_plan_category_id --> find_by_health_plan_category_plan
+
+    find_by_health_plan_category_plan --> store_health_plan_category_plan_id
+    store_health_plan_category_plan_id -->
+    retrieve_patient_id & retrieve_health_plan_agreement_id & retrieve_health_plan_category_id & retrieve_health_plan_category_plan_id -->
+    
+    create_request --> |request_id| store_request_id
+    store_request_id --> add_products_to_request
+    
+    add_products_to_request --> retrieve_request_id -->|request_id| confirm_request
+    confirm_request -->|request_id| get_preparations
+    
+    
+    
+
+
+
+
+    
